@@ -47,3 +47,28 @@ class HandDetector():
                     self.mpDraw.draw_landmarks(
                         img, handLms, self.mpHands.HAND_CONNECTIONS)  # Draw the hand landmarks
         return img
+
+    def findPosition(self, img, handNo=0, draw=True):
+        """ 
+            Finds the positions of the landmarks of a hand.
+
+            Args:
+                img: The input image.
+                handNo: The hand number.
+                draw: Whether to draw the landmarks on the image.
+
+            Returns:
+                lmList: A list of the landmarks of the hand.
+        """
+        lmList = []  # List to store the landmarks of the hand
+        if self.results.multi_hand_landmarks:
+            # Get the hand landmarks
+            myHand = self.results.multi_hand_landmarks[handNo]
+            for id, lm in enumerate(myHand.landmark):  # For each landmark
+                h, w, c = img.shape  # Get the height, width, and number of channels of the image
+                # Get the pixel coordinates of the landmark
+                cx, cy = int(lm.x*w), int(lm.y*h)
+                lmList.append([id, cx, cy])
+                if draw:
+                    cv2.circle(img, (cx, cy), 9, (0, 255, 0), cv2.FILLED)
+        return lmList
