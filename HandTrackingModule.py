@@ -72,3 +72,42 @@ class HandDetector():
                 if draw:
                     cv2.circle(img, (cx, cy), 9, (0, 255, 0), cv2.FILLED)
         return lmList
+
+
+def main():
+    # Open the webcam
+    cap = cv2.VideoCapture(0)
+    detector = HandDetector()  # Create a HandDetector object
+
+    # Initialize variables for frame rate calculation
+    pTime = 0
+    cTime = 0
+
+    # Process the video frames
+    while True:
+        success, img = cap.read()  # Read a frame
+        img = detector.findHands(img)  # Find hands in the frame
+        # Find the positions of the landmarks of the hand
+        lmList = detector.findPosition(img, draw=False)
+
+        # Print the position of the 4th landmark
+        if len(lmList) != 0:
+            print(lmList[4])
+
+        # Calculate and display the frame rate
+        cTime = time.time()
+        fps = 1/(cTime-pTime)
+        pTime = cTime
+
+        # Display the frame rate on the video frame
+        cv2.putText(img, str(int(fps)), (10, 70),
+                    cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 255), 3)
+
+        # Display the video frame
+        cv2.imshow("Image", img)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+
+if __name__ == "__main__":
+    main()
