@@ -1,5 +1,2 @@
-# Ignore __pycache__ directories
 __pycache__/
-
-# Ignore tempCodeRunnerFile.py created by some code editors (e.g., VSCode)
 tempCodeRunnerFile.py
